@@ -1,8 +1,10 @@
 import React,  { Component } from 'react';
 import 'tachyons'
+import 'axios'
 import Navbar from './components/NavBar/NavBar'
 import Form from './components/Form/Form'
 import CodeBlock from './components/CodeBlock/CodeBlock'
+import axios from 'axios';
 
 class App extends Component {
   constructor () {
@@ -21,7 +23,7 @@ class App extends Component {
         cidr_size:''
     }
   }
-   
+    this.onButtonSubmit = this.onButtonSubmit.bind(this)
   }
 
   onInputChange = (event) => {
@@ -37,10 +39,31 @@ class App extends Component {
   }
 
   onButtonSubmit = (event) => {
-    console.log(this.state)
     event.preventDefault();
+    const { info } = this.state
+    var params = {
+      account_name: info.account_name,
+      requester: info.requester,
+      team_ownership:info.team_ownership,
+      ticket_id: info.ticket_id,
+      description: info.description,
+      ou: info.ou,
+      provision_vpc: info.provision_vpc,
+      centralnet: info.centralnet,
+      account_type: info.account_type,
+      cidr_size: info.cidr_size
+    }
+    // We can use fetch as well.
+    axios.post('https://account-creator.com/api/create-account', params).then(
+      response => {
+        console.log(response.data)
+      }
+    ).catch( err => {
+      console.log("There was an error:", err)
+    })
   }
   
+
   render() {
     return(
       <div>
